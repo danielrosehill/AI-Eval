@@ -1,0 +1,19 @@
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+.pnpm-store/
+.DS_Store
+
+# large run artefacts (keep manifest + summary, ignore raw by default — override if needed)
+results/**/raw/
+results/**/cache/
+
+# local scratch
+scratch/
+tmp/
