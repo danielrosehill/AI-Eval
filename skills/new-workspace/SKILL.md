@@ -1,6 +1,6 @@
 ---
 name: new-workspace
-description: Provision a new eval-runner workspace on disk. Use when the user wants to start a new evaluation project — scaffolds evals/, datasets/, results/, and docs/ directories, personalises CLAUDE.md, and (by default) creates a GitHub repo.
+description: Provision a new ai-eval workspace on disk. Use when the user wants to start a new evaluation project — scaffolds evals/, datasets/, results/, and docs/ directories, personalises CLAUDE.md, and (by default) creates a GitHub repo.
 disable-model-invocation: true
 allowed-tools: Bash(mkdir *), Bash(cp *), Bash(cat *), Bash(git init *), Bash(git add *), Bash(git commit *), Bash(gh repo create *), Bash(gh auth status), Bash(git push *), Read, Write
 ---
@@ -8,16 +8,16 @@ allowed-tools: Bash(mkdir *), Bash(cp *), Bash(cat *), Bash(git init *), Bash(gi
 # Provision Eval-Runner Workspace
 
 Creates a new workspace for evaluation work. The plugin's commands
-(`/eval-runner:setup-eval`, `/eval-runner:create-eval`, `/eval-runner:run-eval`,
-`/eval-runner:publish-eval`, `/eval-runner:publish-dataset`,
-`/eval-runner:document-eval`) operate against this scaffold.
+(`/ai-eval:setup-framework-eval`, `/ai-eval:create-eval`, `/ai-eval:run-framework-eval`,
+`/ai-eval:publish-eval`, `/ai-eval:publish-dataset`,
+`/ai-eval:document-eval`) operate against this scaffold.
 
 ## Arguments
 
 `$ARGUMENTS` is parsed as:
 
 - **First positional**: workspace name (Train-Case — e.g. `My-Eval-Project`). Required.
-- **Second positional** (optional): target parent path. Defaults to `~/repos/github/my-repos`.
+- **Second positional** (optional): target parent path. Defaults to the current directory.
 - **`--private`** (optional): create the GitHub repo as private. Default: public.
 - **`--local-only`** (optional): skip GitHub repo creation.
 

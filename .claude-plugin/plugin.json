@@ -1,12 +1,24 @@
 {
-  "name": "eval-runner",
-  "version": "0.1.0",
-  "description": "Scaffolding, running, documenting, and publishing AI evaluations. Ships skills and commands for setting up eval workspaces, creating custom evals (or adapting existing frameworks/benchmarks), running them, and publishing evals or datasets. Bundles a curated ground-truth list of open-source eval tools and benchmarks as a reference data source.",
+  "name": "ai-eval",
+  "version": "0.7.0",
+  "description": "Evaluate AI models for a real job: define the objective and the workload's requirements, draw candidates from the live OpenRouter catalogue, and run wide and shallow (many models, about two outputs each). Also authors standalone evals (one repo plus Hugging Face datasets), runs third-party frameworks, and takes results through to findings and articles.",
   "author": {
     "name": "Daniel Rosehill",
     "url": "https://github.com/danielrosehill"
   },
-  "repository": "https://github.com/danielrosehill/Claude-Eval-Runner-Plugin",
+  "repository": "https://github.com/danielrosehill/AI-Eval",
   "license": "MIT",
-  "keywords": ["evaluation", "evals", "benchmark", "llm", "rag", "agent-eval", "dataset", "inspect-ai", "deepeval", "openai-evals"]
+  "keywords": [
+    "evaluation",
+    "evals",
+    "benchmark",
+    "llm",
+    "openrouter",
+    "model-selection",
+    "llm-as-judge",
+    "hugging-face",
+    "datasets",
+    "inspect-ai",
+    "deepeval"
+  ]
 }

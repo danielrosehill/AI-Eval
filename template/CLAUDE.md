@@ -1,6 +1,6 @@
 # {{WORKSPACE_NAME}}
 
-An evaluation workspace managed with the [eval-runner](https://github.com/danielrosehill/Claude-Eval-Runner-Plugin) plugin.
+An evaluation workspace managed with the [ai-eval](https://github.com/danielrosehill/AI-Eval) plugin.
 
 ## Purpose
 
@@ -15,13 +15,13 @@ An evaluation workspace managed with the [eval-runner](https://github.com/daniel
 
 ## Commands
 
-- `/eval-runner:new-workspace` — provision a new workspace (use outside an existing one).
-- `/eval-runner:create-eval` — design a custom eval (task spec, dataset plan, rubric).
-- `/eval-runner:setup-eval` — wire an eval to a framework.
-- `/eval-runner:run-eval` — execute an eval and capture results.
-- `/eval-runner:document-eval` — write findings into `docs/`.
-- `/eval-runner:publish-eval` — publish eval (and optionally results) to GitHub / HF Space.
-- `/eval-runner:publish-dataset` — publish a dataset to Hugging Face Hub.
+- `/ai-eval:new-workspace` — provision a new workspace (use outside an existing one).
+- `/ai-eval:create-eval` — design a custom eval (task spec, dataset plan, rubric).
+- `/ai-eval:setup-framework-eval` — wire an eval to a framework.
+- `/ai-eval:run-framework-eval` — execute an eval and capture results.
+- `/ai-eval:document-eval` — write findings into `docs/`.
+- `/ai-eval:publish-eval` — publish eval (and optionally results) to GitHub / HF Space.
+- `/ai-eval:publish-dataset` — publish a dataset to Hugging Face Hub.
 
 ## Conventions
 

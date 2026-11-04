@@ -1,54 +1,82 @@
 ---
 name: setup-eval
-description: Set up an evaluation in the current workspace. Use when the user wants to scaffold a single eval — choosing an existing framework (DeepEval, Inspect AI, OpenAI Evals, lm-evaluation-harness, LightEval, OLMES, Promptfoo, etc.), adapting an existing benchmark, or preparing a clean slate for a custom eval. Writes a brief, installs deps, and stubs the eval directory.
+description: Start a new eval of your own, one repo per eval. Checks whether one already exists, then creates a public GitHub repo with the design and rubric, reserves a public Hugging Face dataset for the prompts, and registers it in the public indexes. Private only when the user asks for it. Use when the user says "set up an eval for X", "new eval", "I want to test whether models do X", or "make this plan into an eval".
 ---
 
-# Set Up an Evaluation
+# Set up an eval
 
-Scaffolds one eval inside an eval-runner workspace. Output lives under `evals/<eval-slug>/`.
+The first step for an eval the user designs themselves. It ends with a **placeholder**:
+a **public** GitHub repo whose README sets out the question, the mechanism and the
+rubric. Prompts come next (`draft-test-prompts`), then runs (`run-eval`, `full-run`,
+`publish-run`). Don't ask about visibility: public is the default, and a placeholder
+repo is a legitimate public seed.
 
-## Arguments
+Lifecycle and visibility rules: "Lifecycle" in `conventions.md`.
 
-`$ARGUMENTS` may include:
-- **Name/slug** (required) — kebab-case identifier, e.g. `translation-he-en-quality`.
-- **`--framework=<name>`** — one of the frameworks in `data/awesome-ai-evaluations-tools.md`, or `custom`.
-- **`--type=<type>`** — `tool-use`, `translation`, `rag`, `agent`, `classification`, `summarisation`, `multimodal`, `vision`, `code-gen`, `safety`, `custom`.
-- **`--basis=<ref>`** — existing benchmark/eval to adapt (URL, HF dataset id, or paper id).
+**References.** Read `../../references/conventions.md` first, and use
+`../../references/templates/README.md`. If that path doesn't resolve, clone `danielrosehill/AI-Eval` and read it there.
 
-## Procedure
+## Inputs
 
-1. **Confirm context.** Verify the working directory looks like an eval-runner workspace (has `evals/`, `datasets/`, `results/`, `docs/`). If not, offer to run `/eval-runner:new-workspace` first.
+- The question the eval answers, in the user's words.
+- Optional: a plan file it graduates from, and example prompts. Everything is created public unless the user asks for
+  this eval to be private.
 
-2. **Pick a framework.** If `--framework` not supplied, read `data/awesome-ai-evaluations-tools.md` (bundled with the plugin) and propose 2–3 good fits for the stated eval `--type`. Call out trade-offs (language, judge model cost, parallelism, reporting). Default recommendations by type:
-   - `tool-use`, `agent` → Inspect AI, OpenAI Evals, Harbor
-   - `translation`, `summarisation`, `classification` → DeepEval, lm-evaluation-harness, LightEval, OLMES
-   - `rag` → DeepEval, OpenEvals, Phoenix, Evidently
-   - `multimodal`, `vision` → EvalScope, LightEval
-   - `safety` → Giskard OSS, Inspect AI
-   - Quick/TypeScript → Evalite, Promptfoo
-   - General judge-only → simple-llm-eval, OpenEvals
+## Steps
 
-3. **Write a brief.** Create `evals/<slug>/BRIEF.md` capturing:
-   - Why this eval exists (what decision it informs)
-   - What is being evaluated (model, prompt, pipeline, agent)
-   - Input distribution / dataset source
-   - Scoring approach (exact match, LLM-as-judge, pairwise, rubric, custom metric)
-   - Success criteria (thresholds, acceptance)
-   - Out of scope
-
-4. **Scaffold the directory:**
+1. **Exists check: run these lookups in parallel.**
+   - The user's own work: `<evals-dir>`, their repos, and any plan locations the
+     overlay lists. An existing plan becomes the design; it does not mean the eval is
+     already done.
+   - Published benchmarks: Hugging Face (`hf` CLI or the Hub API, datasets search)
+     and a web search for the topic plus "benchmark" / "eval dataset".
+   - If a published set already answers the question, recommend reusing it rather
+     than building a repo. Note its licence and any known problems.
+     Then stop, and run `register-eval` if the user keeps an index. Building a
+     duplicate is the failure to avoid here.
+2. **Name it.** `<Subject>-Eval`, Train-Case, as specific as possible
+   (`Israel-Palestine-Framing-Eval`, not `Bias-Eval`). State the name you chose in one
+   line and go ahead. Rename it now if needed, before anything links to it.
+3. **Write the README** from the template. Fill in:
+   - The status banner: `placeholder (<today>)`, and the Visibility line
+     `repo public · prompts public · runs none`.
+   - The question.
+   - **Mechanism**: the dimensions, each with two or three example prompts, and the
+     controls. Every eval of a default behaviour needs controls that remove the
+     ambiguity, to show the model can move off the default when told.
+   - **Grading**: the shared 0–3 severity scale (0 = clean). Say how scores
+     aggregate, per model and per dimension.
+   - **Open questions**: anything you'd otherwise have to guess.
+   - **Origin**: the plan file or notes it came from, with links.
+   - **Related** and, if prompts will state false claims on purpose, **Disclaimer**.
+   Keep the README for the design. Prompts, harness and results come later.
+4. **Create the repo** in `<evals-dir>/<Name>-Eval`:
+   ```bash
+   cd <evals-dir> && mkdir <Name>-Eval && cd <Name>-Eval && git init
+   # write README.md
+   git add -A && git commit -m "Placeholder: scope and design"
+   gh repo create <owner>/<Name>-Eval --public --source . --push \
+     --description "<one-line question>"
    ```
-   evals/<slug>/
-   ├── BRIEF.md
-   ├── config.{yaml|py|ts}   # framework-native config
-   ├── dataset/              # eval inputs (or pointer to datasets/<id>/)
-   ├── judges/               # rubric prompts / graders
-   ├── run.sh                # one-line invocation
-   └── README.md             # how to run + interpret
+   Use `--private` only when the user asked for this eval to be private.
+5. **Reserve the prompts dataset.** Create it empty now, so the name is held and the
+   link in the README isn't dead:
+   ```bash
+   hf repo create <owner>/<Name>-Eval --repo-type dataset
    ```
+   Add `--private` only for an eval the user asked to keep private.
+   Uploading content is `draft-test-prompts`'s job.
+6. **Register.** Run `register-eval` (stage `planned`), and retire the plan file if
+   it graduated from one. A public index never links a private repo.
+7. **Report** the repo and dataset URLs, and the next step: `draft-test-prompts`.
+   If the user asked for prompts in the same request, carry on into it. Otherwise
+   stop here.
 
-5. **Install deps.** Add the framework to the workspace's chosen dep manager (Python: uv/pip, TS: pnpm/npm). Prefer `uv` if `pyproject.toml` exists. Don't assume — ask if unclear.
+**Stop at setup.** This skill never leads into a run. Don't build a harness, and
+don't propose or ask about running. See "Where a task stops" in `conventions.md`.
 
-6. **Stub the judge / scorer.** If LLM-as-judge, write the rubric in `judges/` as a standalone prompt with explicit input/output contract and failure handling.
+## Don't
 
-7. **Report.** Summarise what was created, what the user needs to fill in (dataset pointer, API keys), and the command to run it.
+- Don't write prompts into the README. They go in `data/prompts.jsonl`.
+- Don't scaffold empty `data/`, `runs/` or harness folders.
+- Don't make a combined repo for several evals. Each eval is atomic.

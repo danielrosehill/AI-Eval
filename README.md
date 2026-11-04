@@ -1,63 +1,63 @@
-# Claude-Eval-Runner-Plugin
+# AI-Eval
 
-A Claude Code plugin for setting up, running, documenting, and publishing AI evaluations — whether you're using an existing eval framework, adapting an existing benchmark, or designing a custom one from scratch.
+Agent skills for evaluating AI models for a real job, from working out what the job needs
+to a published write-up. Formerly `Claude-Eval-Runner-Plugin` (`eval-runner`), merged on
+2026-11-04 with the author's private eval-authoring skills.
 
-## What it's for
+> **Status: v0.7.0 (2026-11-04).** The catalogue script is tested against the live OpenRouter
+> API. No eval has yet been taken end to end through the merged plugin.
 
-Evaluating AI systems is the unglamorous half of AI work. This plugin is a harness for the harness work: scaffold an eval workspace, pick (or remix) a framework, design a rubric, run the thing, write down what you found, and publish it when it's worth sharing.
+## The default path
+
+| Step | Skill | Produces |
+|---|---|---|
+| 1 | `define-objective` | `selection/objective.md`: the decision, what a win looks like, who judges |
+| 2 | `define-workload-requirements` | `selection/requirements.json`: context load, output, capabilities and cost, each traced to the work |
+| 3 | `probe-openrouter` | A dated catalogue snapshot; what's new; key and liveness checks |
+| 4 | `shortlist-candidates` | `selection/candidates.json`: a wide, varied field with a reason for each |
+| 5 | `run-eval` | A wide-and-shallow run under a hard spend cap, sorted into tiers |
+
+### Wide and shallow
+
+Many evals are narrow and long: a few models, many iterations. `run-eval` does the opposite:
+12–20 models, about two outputs each. For model selection the larger risk is never having
+tested the best model, and a second output is enough to rule out a fluke. A wide run is a
+screen, so it reports tiers (advance, maybe, out), not a ranking. Spending stops at a hard cap,
+$5 by default, and nothing paid starts until the estimate is approved.
+
+## All skills
+
+| Stage | Skill | Does |
+|---|---|---|
+| Build a standalone eval | `setup-eval` | Exists check, then a public repo with question, mechanism and rubric, plus a reserved dataset |
+| | `draft-test-prompts`, `add-prompts` | Write or extend `data/prompts.jsonl` and its dataset card |
+| Other runs | `full-run` | Every prompt across a panel, with judge and report. Explicit request only |
+| | `informal-image-eval` | A few image models on fal, graded by hand in an annotation Space |
+| | `deploy-arena` | Blind human A/B rating |
+| Share | `publish-run`, `go-public`, `register-eval` | Raw data to Hugging Face, pre-publication review, index upkeep |
+| Write up | `package-results`, `analyse-findings`, `draft-article` | Tables and charts, a verified findings memo, articles |
+| Framework workspaces | `new-workspace`, `create-eval`, `setup-framework-eval`, `run-framework-eval`, `publish-eval`, `publish-dataset` | Many evals in one workspace, wired to third-party frameworks (DeepEval, Inspect AI, lm-evaluation-harness and others) |
+
+The workspace skills also have `/ai-eval:` commands, and the `eval-engineer` agent coordinates a whole
+eval. `references/` holds conventions, pitfalls from real runs and templates. `data/` holds a
+snapshot of the [Awesome AI Evaluations & Benchmarks](https://github.com/danielrosehill/Awesome-AI-Evaluations-Tools)
+list, which the framework skills read before recommending a tool.
 
 ## Install
 
 ```bash
-# from inside Claude Code
-/plugin marketplace add <your-marketplace>
-/plugin install eval-runner
+/plugin marketplace add danielrosehill/Claude-Code-Plugins
+/plugin install ai-eval@danielrosehill
 ```
 
-Or add as a local plugin by pointing Claude Code at this directory.
+Needs `OPENROUTER_API_KEY` in the environment for paid calls. `fetch`, `new` and `endpoints` work
+without it. Python 3 standard library only for `scripts/openrouter_catalogue.py`.
 
-## Commands
+## Personal settings
 
-| Command | Purpose |
-|---|---|
-| `/eval-runner:new-workspace <name>` | Provision a new eval workspace (Train-Case name; optional `--private` / `--local-only`). |
-| `/eval-runner:create-eval <slug>` | Design a custom eval — task spec, dataset plan, rubric. Use `--inspired-by` to remix an existing benchmark. |
-| `/eval-runner:setup-eval <slug>` | Wire an eval to a framework. Use `--framework=` to pin, or let the plugin suggest based on `--type=`. |
-| `/eval-runner:run-eval <slug>` | Execute an eval across one or more SUTs (`--sut=`), with manifest + summary under `results/`. |
-| `/eval-runner:document-eval <slug>` | Write up rationale and findings into `docs/`. |
-| `/eval-runner:publish-eval <slug>` | Publish the eval (and optionally results) to GitHub, a Hugging Face Space, or a local bundle. |
-| `/eval-runner:publish-dataset <id>` | Publish a dataset to Hugging Face Hub with a dataset card and content hash. |
+The plugin is generic. Your GitHub owner, evals directory, indexes and spend rules go in a private
+overlay directory that it reads at run time: see [`references/overlay.md`](references/overlay.md).
 
-## Agent
-
-- `eval-engineer` — autonomous subagent that coordinates the full design → setup → run → document → publish loop for non-trivial eval work.
-
-## Ground truth
-
-Bundled under `data/awesome-ai-evaluations-tools.md` is a snapshot of the [Awesome AI Evaluations & Benchmarks](https://github.com/danielrosehill/Awesome-AI-Evaluations-Tools) list — a curated canon of open-source eval frameworks, benchmarks, and observability platforms. The plugin reads this before recommending any tool, and flags when it goes off-list.
-
-See [`data/README.md`](data/README.md) for refresh instructions.
-
-## Workspace shape
-
-```
-<workspace>/
-├── CLAUDE.md
-├── README.md
-├── evals/<slug>/           # BRIEF.md, TASK.md, RUBRIC.md, config, run.sh, judges/
-├── datasets/<id>/          # data/, CARD.md, HASH
-├── results/<slug>/<run>/   # manifest.yaml, SUMMARY.md, raw/
-└── docs/                   # writeups and findings
-```
-
-## Conventions
-
-- Eval slugs: kebab-case, descriptive (`translation-he-en-quality`, `rag-legal-docs`).
-- Run ids: `YYYY-MM-DD-HHMM-<slug>-<shortsha>`.
-- Results are append-only — rerun with a new id instead of editing.
-- Every run has a manifest (dataset hash, framework version, git sha, cost) so it's reproducible.
-- Repo names: Train-Case.
-
-## License
+## Licence
 
 MIT.

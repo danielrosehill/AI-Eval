@@ -5,7 +5,7 @@ description: Design a custom eval from scratch, or remix an existing benchmark. 
 
 # Create a Custom Eval
 
-Where `setup-eval` wires up a framework, `create-eval` designs the eval's substance: what's tested, how it's scored, what "good" looks like. Use together — create first, then setup.
+Where `setup-framework-eval` wires up a framework, `create-eval` designs the eval's substance: what's tested, how it's scored, what "good" looks like. Use together — create first, then setup.
 
 ## Arguments
 
@@ -48,4 +48,4 @@ Where `setup-eval` wires up a framework, `create-eval` designs the eval's substa
 
 6. **Reporting format.** Write `evals/<slug>/REPORT_TEMPLATE.md` — the structure results will be written into so that `publish-eval` / `document-eval` have a fixed target.
 
-7. **Handoff.** Suggest running `/eval-runner:setup-eval` to wire the design to a framework, or writing a minimal custom runner if nothing in `data/awesome-ai-evaluations-tools.md` fits.
+7. **Handoff.** Suggest running `/ai-eval:setup-framework-eval` to wire the design to a framework, or writing a minimal custom runner if nothing in `data/awesome-ai-evaluations-tools.md` fits.
