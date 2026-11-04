@@ -4,8 +4,12 @@ Agent skills for evaluating AI models for a real job, from working out what the 
 to a published write-up. Formerly `Claude-Eval-Runner-Plugin` (`eval-runner`), merged on
 2026-11-04 with the author's private eval-authoring skills.
 
-> **Status: v0.7.0 (2026-11-04).** The catalogue script is tested against the live OpenRouter
-> API. No eval has yet been taken end to end through the merged plugin.
+> **Status: v0.8.0 (2026-11-04).** `openrouter_catalogue.py` is tested against the live OpenRouter
+> API, and `blind_items.py` on sample data. No eval has yet been taken end to end through the
+> merged plugin, and no Space has been built from the new Space skills.
+
+**Start here:** `start-eval` inspects the project, finds what's already set up, and routes to the
+right skills.
 
 ## The default path
 
@@ -29,11 +33,21 @@ $5 by default, and nothing paid starts until the estimate is approved.
 
 | Stage | Skill | Does |
 |---|---|---|
+| Where it lives | `setup-repo-eval-space` | An eval space inside an existing project repo |
+| | `setup-agent-eval-space` | No framework: the agent is the harness, following a written procedure |
+| | `install-eval-cli` | Install Inspect AI, promptfoo, DeepEval, lm-eval, LightEval or EvalScope on Linux |
+| Methodology | `image-gen-eval` | Generative image models: sourcing, per-image pricing, human grading |
+| | `rag-eval` | Retrieval and generation measured apart |
+| | `agent-eval` | Tasks with checkable end states, sandboxing, reliability |
+| | `speech-eval` | ASR with WER on real audio; TTS by blind listening |
+| | `regression-eval` | A fixed test set against a baseline, for CI |
+| Human judgement | `setup-annotation-space` | Blind grading on a private Hugging Face Space |
+| | `deploy-arena` | Blind A/B between models |
+| | `setup-human-feedback-space` | Preference data for RLHF, DPO or reward models |
 | Build a standalone eval | `setup-eval` | Exists check, then a public repo with question, mechanism and rubric, plus a reserved dataset |
 | | `draft-test-prompts`, `add-prompts` | Write or extend `data/prompts.jsonl` and its dataset card |
 | Other runs | `full-run` | Every prompt across a panel, with judge and report. Explicit request only |
 | | `informal-image-eval` | A few image models on fal, graded by hand in an annotation Space |
-| | `deploy-arena` | Blind human A/B rating |
 | Share | `publish-run`, `go-public`, `register-eval` | Raw data to Hugging Face, pre-publication review, index upkeep |
 | Write up | `package-results`, `analyse-findings`, `draft-article` | Tables and charts, a verified findings memo, articles |
 | Framework workspaces | `new-workspace`, `create-eval`, `setup-framework-eval`, `run-framework-eval`, `publish-eval`, `publish-dataset` | Many evals in one workspace, wired to third-party frameworks (DeepEval, Inspect AI, lm-evaluation-harness and others) |
@@ -51,7 +65,7 @@ list, which the framework skills read before recommending a tool.
 ```
 
 Needs `OPENROUTER_API_KEY` in the environment for paid calls. `fetch`, `new` and `endpoints` work
-without it. Python 3 standard library only for `scripts/openrouter_catalogue.py`.
+without it. The scripts in `scripts/` need only the Python 3 standard library.
 
 ## Personal settings
 

@@ -1,7 +1,7 @@
 {
   "name": "ai-eval",
-  "version": "0.7.0",
-  "description": "Evaluate AI models for a real job: define the objective and the workload's requirements, draw candidates from the live OpenRouter catalogue, and run wide and shallow (many models, about two outputs each). Also authors standalone evals (one repo plus Hugging Face datasets), runs third-party frameworks, and takes results through to findings and articles.",
+  "version": "0.8.0",
+  "description": "Evaluate AI models for a real job, starting from start-eval: define the objective and workload, draw candidates from the live OpenRouter catalogue, and run wide and shallow (many models, about two outputs each). Covers in-repo and agent-run eval spaces, framework CLIs, image, RAG, agent, speech and regression evals, private annotation and human feedback Spaces, and findings through to articles.",
   "author": {
     "name": "Daniel Rosehill",
     "url": "https://github.com/danielrosehill"
