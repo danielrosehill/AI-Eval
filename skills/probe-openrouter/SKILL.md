@@ -1,6 +1,6 @@
 ---
 name: probe-openrouter
-description: Probe OpenRouter for the current state of its catalogue - snapshot every model with context, output limits, prices, modalities and parameters, list what's new, check the API key, inspect who serves a model, and confirm models actually answer. Use when the user says "what's on OpenRouter", "what's new on OpenRouter", "is this model on OpenRouter", "check OpenRouter", or before choosing candidates.
+description: Probe OpenRouter for the current state of its catalogue - snapshot every model with context, output limits, prices, modalities and parameters, list what's new, check the API key, inspect who serves a model, and confirm models actually answer. Use when the user says "what's on OpenRouter", "what's trending on OpenRouter", "what's new on OpenRouter", "is this model on OpenRouter", "check OpenRouter", or before choosing candidates.
 ---
 
 # Probe OpenRouter
@@ -16,14 +16,23 @@ standard library only, JSON on stdout). If that path doesn't resolve, clone
 
 ```bash
 python3 scripts/openrouter_catalogue.py fetch --out selection/openrouter-catalogue-<YYYY-MM-DD>.json
-python3 scripts/openrouter_catalogue.py new --catalogue <file> --days 14
-python3 scripts/openrouter_catalogue.py endpoints <slug>
+OX="uvx --from git+https://github.com/danielrosehill/AI-Model-Research-Plugin orexplorer"   # or `orexplorer` after uv tool install
+$OX new --days 14 --table
+$OX endpoints <slug> --table
+$OX trending --table                     # most-used this week (scraped from openrouter.ai/rankings)
+$OX benchmarks intelligence --table      # also: coding, agentic (Artificial Analysis via OpenRouter)
+$OX models --cap tools --cap structured --max-out 5 --table   # capability filters; `$OX capabilities` lists them
 ```
+
+`orexplorer` is the shared OpenRouter CLI in the ai-model-research plugin. It reads live data and outputs JSON
+by default. The dated snapshot from `fetch` stays the record an eval run works from, so `filter` and `estimate`
+read the snapshot, not `orexplorer`.
 
 - `fetch` writes one normalised record per model: `id`, `lab`, `released`, `context`,
   `max_output`, modalities, `usd_per_m_in`, `usd_per_m_out`, `parameters`, reasoning
   support, `expires`.
-- `new` lists recent releases, which is often the reason for running an eval at all.
+- `new` lists recent releases, which is often the reason for running an eval at all. `trending` and
+  `benchmarks` help seed a wide pass with what people actually use and how it scores.
 - `endpoints` shows the providers behind one model, with quantization and uptime. Use it
   when quantization or provider matters. A model can be listed yet served only at fp4.
 

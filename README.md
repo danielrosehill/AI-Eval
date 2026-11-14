@@ -17,7 +17,7 @@ right skills.
 |---|---|---|
 | 1 | `define-objective` | `selection/objective.md`: the decision, what a win looks like, who judges |
 | 2 | `define-workload-requirements` | `selection/requirements.json`: context load, output, capabilities and cost, each traced to the work |
-| 3 | `probe-openrouter` | A dated catalogue snapshot; what's new; key and liveness checks |
+| 3 | `probe-openrouter` | A dated catalogue snapshot; what's new and trending (via `orexplorer`); key and liveness checks |
 | 4 | `shortlist-candidates` | `selection/candidates.json`: a wide, varied field with a reason for each |
 | 5 | `run-eval` | A wide-and-shallow run under a hard spend cap, sorted into tiers |
 
@@ -64,8 +64,14 @@ list, which the framework skills read before recommending a tool.
 /plugin install ai-eval@danielrosehill
 ```
 
-Needs `OPENROUTER_API_KEY` in the environment for paid calls. `fetch`, `new` and `endpoints` work
+Needs `OPENROUTER_API_KEY` in the environment for paid calls. `fetch`, `filter` and `estimate` work
 without it. The scripts in `scripts/` need only the Python 3 standard library.
+
+Live model discovery (what's new, who serves a model, trending, benchmarks, capability filters) uses
+`orexplorer`, the shared OpenRouter CLI in the [ai-model-research](https://github.com/danielrosehill/AI-Model-Research-Plugin)
+plugin. Run it with `uvx --from git+https://github.com/danielrosehill/AI-Model-Research-Plugin orexplorer`. Since
+2026-11-14 it replaces this plugin's own `new` and `endpoints` commands. The dated snapshot from `fetch` stays
+the record an eval run works from.
 
 ## Personal settings
 

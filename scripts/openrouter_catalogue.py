@@ -2,15 +2,19 @@
 """OpenRouter catalogue helper for the ai-eval plugin. Standard library only.
 
   fetch     --out FILE                        snapshot /api/v1/models (no key needed)
-  new       --catalogue FILE --days N         models released in the last N days
   filter    --catalogue FILE --requirements FILE [--out FILE]
   estimate  --catalogue FILE --requirements FILE --candidates FILE
             [--outputs N] [--judge SLUG] [--cap USD]
-  endpoints SLUG                              providers serving one model
   key                                         key limit and usage (OPENROUTER_API_KEY)
   ping      --candidates FILE | SLUG [SLUG…]  one tiny paid call per model (needs key)
 
 Output is JSON on stdout.
+
+Live discovery (what's new, who serves a model, trending, benchmarks, capability filters) moved to
+`orexplorer` on 2026-11-14, in the ai-model-research plugin:
+  uvx --from git+https://github.com/danielrosehill/AI-Model-Research-Plugin orexplorer new --days 14
+  ... orexplorer endpoints SLUG          (was: endpoints SLUG)
+This script keeps the eval-specific parts: dated snapshots, requirements filtering, cost estimates, key, ping.
 """
 import argparse
 import json
@@ -19,7 +23,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timezone
 
 API = "https://openrouter.ai/api/v1"
 
@@ -100,11 +104,6 @@ def cmd_fetch(a):
         json.dump(snapshot, f, indent=1)
     print(json.dumps({"out": a.out, "count": len(models), "newest": [m["id"] for m in models[:5]]}, indent=1))
 
-
-def cmd_new(a):
-    cutoff = (date.today() - timedelta(days=a.days)).isoformat()
-    hits = [m for m in load(a.catalogue)["models"] if m["released"] >= cutoff]
-    print(json.dumps([{k: m[k] for k in ("id", "released", "context", "usd_per_m_in", "usd_per_m_out")} for m in hits], indent=1))
 
 
 def reject_reason(m, hard, tokens, today):
@@ -192,15 +191,6 @@ def cmd_estimate(a):
     print(json.dumps(result, indent=1))
 
 
-def cmd_endpoints(a):
-    status, body = call(f"/models/{a.slug}/endpoints")
-    if status != 200:
-        sys.exit(f"endpoints for {a.slug} returned {status}: {body}")
-    rows = [{k: e.get(k) for k in ("provider_name", "quantization", "context_length", "max_completion_tokens",
-                                   "status", "uptime_last_30m")}
-            for e in body["data"].get("endpoints", [])]
-    print(json.dumps({"id": a.slug, "endpoints": rows}, indent=1))
-
 
 def cmd_key(_):
     status, body = call("/key", key=need_key())
@@ -235,11 +225,9 @@ def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("fetch"); s.add_argument("--out", required=True); s.set_defaults(fn=cmd_fetch)
-    s = sub.add_parser("new"); s.add_argument("--catalogue", required=True); s.add_argument("--days", type=int, default=14); s.set_defaults(fn=cmd_new)
     s = sub.add_parser("filter"); s.add_argument("--catalogue", required=True); s.add_argument("--requirements", required=True); s.add_argument("--out"); s.set_defaults(fn=cmd_filter)
     s = sub.add_parser("estimate"); s.add_argument("--catalogue", required=True); s.add_argument("--requirements", required=True); s.add_argument("--candidates", required=True)
     s.add_argument("--outputs", type=int); s.add_argument("--judge"); s.add_argument("--cap", type=float); s.set_defaults(fn=cmd_estimate)
-    s = sub.add_parser("endpoints"); s.add_argument("slug"); s.set_defaults(fn=cmd_endpoints)
     s = sub.add_parser("key"); s.set_defaults(fn=cmd_key)
     s = sub.add_parser("ping"); s.add_argument("slugs", nargs="*"); s.add_argument("--candidates"); s.set_defaults(fn=cmd_ping)
     a = p.parse_args()
