@@ -21,5 +21,6 @@ they conflict. All files are optional.
 |---|---|
 | `conventions.md` | `<owner>`, `<evals-dir>`, how to run a command with API keys in its environment, where to look for existing plans, blog and collection hand-offs, and any spend rules stricter than the defaults |
 | `register.md` | The indexes `register-eval` keeps up to date, and how to edit each |
+| `evals.json` | The user's own evals (`my-evals`): ids, nicknames, domain, repos, datasets, Spaces, leaderboards, and the paths of each eval's own skills |
 
 Read `conventions.md` before any skill that creates a repo, spends money or publishes.

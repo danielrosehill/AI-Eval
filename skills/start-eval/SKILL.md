@@ -11,7 +11,10 @@ first, propose a route, and ask only about what inspection can't settle.
 
 ## 1. Look at what already exists
 
-Check before asking anything:
+**First, is this one of the user's own evals?** Run `my-evals`: if the user's words match an entry in their private
+index, load that eval's repos, records and eval-specific skills and continue it; don't start a new one.
+
+Then check before asking anything:
 
 | Look for | Means |
 |---|---|
@@ -21,6 +24,7 @@ Check before asking anything:
 | Hugging Face datasets or Spaces linked in the README, a `space/` folder | Rating infrastructure exists |
 | `OPENROUTER_API_KEY`, `hf auth whoami`, `uv`, Node version | What can run now |
 | The overlay (`../../references/overlay.md`) | The user's standing conventions |
+| `modal profile current`, `~/.modal.toml` | Whether heavy work can go to Modal (`../../references/compute.md`) |
 
 Existing infrastructure wins. Never build a parallel setup beside it.
 

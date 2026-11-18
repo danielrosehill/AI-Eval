@@ -43,6 +43,29 @@ No metric captures whether a voice is pleasant to hear, so listening decides.
 4. **Script the objective checks:** transcribe the audio with an ASR model and compare it with
    the script. This catches dropped or invented words, and pronunciation failures.
 5. **Record** cost per hour of audio, latency, and voice licensing, especially for voice clones.
+6. **Measure what doesn't need ears:** an objective voice profile per voice, to help people pick by type next to the
+   listening results. `scripts/voice_profile.py` (`--runs <dir>/<run>/<item>.wav --texts items.jsonl`) gives:
+   - **Words per minute,** pooled: total source words / total seconds of speech (edge silence trimmed, pauses kept).
+     Pool over passages, not single sentences: a six-word sentence reads at ~250 WPM with no pauses, a paragraph at
+     ~130. A WPM far from the rest (<0.65x or >1.4x the median) is a flag for skipped, repeated or truncated text,
+     not a pace.
+   - **Pitch** (median F0 and register for the voice's gender), **intonation** (F0 spread in semitones),
+     **brightness** (spectral centre of gravity, 500-8000 Hz) and **clarity** (harmonics-to-noise ratio).
+     Track pitch in a per-gender range (male 60-250 Hz, female 100-450 Hz) to avoid octave errors. Label
+     intonation, brightness and clarity relative to voices of the same gender: absolute cut-offs call most male
+     voices "breathy" and most TTS "lively".
+   - Decode audio with ffmpeg, not the analysis library's own reader: streamed WAV headers can claim billions of
+     samples.
+   It is CPU work, about a second per clip: fine locally for hundreds of clips after a capped probe; thousands go to a
+   cloud worker (`../../references/compute.md`).
+7. **Keep the listener's view of each voice apart from the measurements:** what it suits (audiobooks, podcasts,
+   narration, learner reference, IVR...), what it doesn't, and a few descriptors in their words, one row per voice
+   (`run, uses[], avoid[], character[], note`). Present both side by side; never infer a use the listener didn't state.
+
+## Compute
+
+Local ASR or TTS models, GPU inference and large batch analysis do not run on the user's laptop: see
+`../../references/compute.md` (Modal by default when the user is authenticated there).
 
 ## Storage
 
