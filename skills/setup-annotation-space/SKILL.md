@@ -4,6 +4,7 @@ description: Set up a private Hugging Face Space for grading an eval's outputs b
 ---
 
 # Set up an annotation Space
+> **Two-pass default:** when the question is "which outputs are acceptable, and which acceptable one is best", use `screen-then-rank` (a pass/fail screen, then pairwise among the survivors). This skill is one of its passes.
 
 The eval-specific layer on top of a general annotation Space: what gets shown, what stays
 hidden, and how the grades return to the eval.

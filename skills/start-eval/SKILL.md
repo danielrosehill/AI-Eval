@@ -61,6 +61,7 @@ Propose an answer to each from what you found. Say what you assumed, and let the
 | Situation | Route |
 |---|---|
 | Quality only a reader can judge, few outputs | The user or agent reads them. Nothing to set up |
+| Judge outputs by hand: which are acceptable, then which is best (the default) | `screen-then-rank` |
 | Scores or labels against a rubric, from any browser | `setup-annotation-space` |
 | Blind A/B between models | `deploy-arena` |
 | Human preferences kept as training data | `setup-human-feedback-space` |

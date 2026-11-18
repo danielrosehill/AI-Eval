@@ -4,7 +4,7 @@ Agent skills for evaluating AI models for a real job, from working out what the 
 to a published write-up. Formerly `Claude-Eval-Runner-Plugin` (`eval-runner`), merged on
 2026-11-04 with the author's private eval-authoring skills.
 
-> **Status: v0.8.0 (2026-11-04).** `openrouter_catalogue.py` is tested against the live OpenRouter
+> **Status: v0.9.0 (2026-11-18): adds `screen-then-rank`, the default two-pass human judgement method.** v0.8.0 (2026-11-04): `openrouter_catalogue.py` is tested against the live OpenRouter
 > API, and `blind_items.py` on sample data. No eval has yet been taken end to end through the
 > merged plugin, and no Space has been built from the new Space skills.
 
@@ -41,7 +41,8 @@ $5 by default, and nothing paid starts until the estimate is approved.
 | | `agent-eval` | Tasks with checkable end states, sandboxing, reliability |
 | | `speech-eval` | ASR with WER on real audio; TTS by blind listening |
 | | `regression-eval` | A fixed test set against a baseline, for CI |
-| Human judgement | `setup-annotation-space` | Blind grading on a private Hugging Face Space |
+| Human judgement | `screen-then-rank` | Default method: pass/fail screen with reasons, then blind pairwise among survivors (Bradley-Terry) |
+| | `setup-annotation-space` | Blind grading on a private Hugging Face Space |
 | | `deploy-arena` | Blind A/B between models |
 | | `setup-human-feedback-space` | Preference data for RLHF, DPO or reward models |
 | Build a standalone eval | `setup-eval` | Exists check, then a public repo with question, mechanism and rubric, plus a reserved dataset |
