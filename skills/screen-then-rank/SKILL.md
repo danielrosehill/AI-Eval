@@ -24,6 +24,12 @@ Quality scales (1-5 naturalness, clarity...) are an optional third pass, only if
 **Either pass can be done by voice** (`spoken-annotations`): say the verdict, reason and detail for each output, and a
 model applies them to the structure afterwards.
 
+**Generate in rounds, only for survivors** (Daniel, 2026-11-18). Don't generate the full item set for every system up
+front. Round 1 is one short item per system (and per variant). Screen it, and then generate the next, harder or longer
+item only for the systems that passed (for TTS: a paragraph of 3-4 sentences, then specific traps), until a few remain
+for pass 2. The first Hebrew TTS bake-off made 500 clips, most of them for voices excluded after one listen. Cheap
+automatic measurements (loudness, pace) can run on everything; generation spend and listening time go only to survivors.
+
 ## Why this order
 
 - **Pass/fail is fast and consistent.** "Is this fine or is it a problem?" is the decision people actually make.
