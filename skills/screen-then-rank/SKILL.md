@@ -8,10 +8,12 @@ description: Two-pass human evaluation of model outputs - first a fast pass/fail
 The author's preferred method for human judgement of model outputs (Daniel, 2026-11-18, first used on the Hebrew
 TTS bake-off): don't score everything on 1-5 scales first. Make two passes.
 
-1. **Screen.** Give every output **Pass** or **Fail**, and nothing more qualitative. A Fail must carry at least one
-   structured reason, drawn from a short list made for the task (for TTS: a word with the stress on the wrong syllable,
-   a mispronounced word with the IPA heard and expected, a glitch, truncation, wrong voice or language). Record any
-   attribute the selection depends on as you go (for TTS: the voice's gender).
+1. **Screen.** Listen to or read each output whole and give it **Pass** or **Fail**, and nothing more qualitative. A
+   Fail takes one tap on an output-level reason category made for the task (for TTS: mispronunciation, wrong emphasis,
+   glitch, truncated or skipped words, wrong voice or language, other). Record any attribute the selection depends on
+   as you go (for TTS: the voice's gender). **Detail is a separate, optional layer**: which word failed, the syllable
+   stressed vs the one that should be, IPA heard vs expected, quality scores. Add it when it's useful, and never
+   require it to save a verdict.
 2. **Rank.** Take only the outputs that passed. For each item (prompt or sentence), compare them **head to head,
    blind**, in random left/right order: A better, B better, tie, or both bad. "Both bad" sends both back as late fails,
    with a reason. Fit a **Bradley-Terry** model to the outcomes, counting a tie as half a win to each side, to get a
@@ -24,7 +26,7 @@ Quality scales (1-5 naturalness, clarity...) are an optional third pass, only if
 - **Pass/fail is fast and consistent.** "Is this fine or is it a problem?" is the decision people actually make.
   Absolute 1-5 scores drift across a session and between annotators.
 - **The reasons are data.** Structured failure reasons (which word, what went wrong) replace free-form comments, and
-  they show what fails as well as how often.
+  they show what fails as well as how often. The detail layer, when used, says exactly where.
 - **Pairwise is where the effort goes.** Head-to-heads among acceptable outputs are more reliable than absolute scores,
   and they are spent only where the choice is real.
 - **It scales down.** Pass 1 alone already answers "which can we use". Pass 2 is needed only when several pass.
@@ -33,12 +35,13 @@ Quality scales (1-5 naturalness, clarity...) are an optional third pass, only if
 
 1. **Requires outputs** from a run (`run-eval`, `full-run`, or a bake-off's own generator), with a manifest of items
    x systems (one output per pair).
-2. **Write the failure taxonomy** from the objective's failure wording before anyone annotates. Keep it short: two or
-   three structured, word- or span-level types plus a handful of output-level chips plus "other + comment". Decide
+2. **Write the failure taxonomy** from the objective's failure wording before anyone annotates. Keep it short: a
+   handful of output-level reason categories plus "other + comment" for the screen, and, for the optional detail layer,
+   two or three structured word- or span-level types (for TTS: stress, mispronunciation in IPA). Decide
    which attributes to record in pass 1 (gender, language, length...).
 3. **Build the Space.** Private, with a private annotations dataset (`<owner>/<Name>-Eval-Ratings`, see
    `../../references/conventions.md`), blind by default. Store each pass in its own file: `screen.jsonl` (system,
-   item, verdict, reasons, attributes, note, annotator, timestamp; the latest line per (system, item) wins) and
+   item, verdict, fail_reasons, attributes, optional detail, note, annotator, timestamp; the latest line per (system, item) wins) and
    `pairs.jsonl` (item, left, right, outcome, note, annotator, timestamp).
    - **Audio:** use `danielrosehill/TTS-Pronunciation-Annotation-Starter`, the reference implementation of both
      passes. It is a Docker Space with a config, so a new eval writes a config, not code. It also has word-level stress
@@ -63,6 +66,6 @@ Quality scales (1-5 naturalness, clarity...) are an optional third pass, only if
 ## Don't
 
 - Don't ask for quality scores in pass 1. That is the slow, drifting part the method exists to avoid.
-- Don't accept a Fail with no reason.
+- Don't accept a Fail with no reason category, and don't require the detail layer to save one.
 - Don't run pass 2 on outputs that failed the screen, or show system names before a verdict is saved.
 - Don't rank from fewer than about 3 comparisons per system. Say the ranking is provisional instead.
