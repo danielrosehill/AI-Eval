@@ -4,6 +4,7 @@ description: "Add human A/B rating to an eval: a blinded pairwise arena (local, 
 ---
 
 # Deploy the human A/B arena
+
 > **Two-pass default:** when the question is "which outputs are acceptable, and which acceptable one is best", use `screen-then-rank` (a pass/fail screen, then pairwise among the survivors). This skill is one of its passes.
 
 Pairwise human preference evaluation, as in Chatbot Arena: the same answer pairs the
