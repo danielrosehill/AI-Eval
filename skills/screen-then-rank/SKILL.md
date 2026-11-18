@@ -21,6 +21,9 @@ TTS bake-off): don't score everything on 1-5 scales first. Make two passes.
 
 Quality scales (1-5 naturalness, clarity...) are an optional third pass, only if a finer read of the finalists is needed.
 
+**Either pass can be done by voice** (`spoken-annotations`): say the verdict, reason and detail for each output, and a
+model applies them to the structure afterwards.
+
 ## Why this order
 
 - **Pass/fail is fast and consistent.** "Is this fine or is it a problem?" is the decision people actually make.
