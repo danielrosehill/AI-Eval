@@ -45,14 +45,19 @@ Quality scales (1-5 naturalness, clarity...) are an optional third pass, only if
      and IPA tags and per-language IPA packs.
    - **Text or images:** adapt `setup-annotation-space` for pass 1 and `deploy-arena` for pass 2. They are the same
      two forms, fed from the screen's survivors.
-4. **Schedule the pairs.** Pass 2 uses only the systems that passed screening on that item. With up to 6 survivors,
+4. **Run pass 2 through `pairwise-eval`** when it's available (the author's plugin for blind A/B:
+   `start-pairwise-eval`, `package-pairwise-round`, `run-playoff`, `pairwise-results`). Feed it only the survivors of
+   each item. Its adaptive play-off (knock out anything with a head-to-head loss, send only the deciding pairs, repeat
+   to a winner) needs far fewer votes than all pairs. Its `pairwise-results` fits Bradley-Terry and unblinds. If it's
+   not available, schedule the pairs yourself:
+5. **Schedule the pairs.** Pass 2 uses only the systems that passed screening on that item. With up to 6 survivors,
    compare every pair. With more, take a balanced random subset in which each system appears about equally often.
    Show progress.
-5. **Report.**
+6. **Report.**
    - Pass rate per system, and failures by reason and by item (most-failed words or spans).
    - Bradley-Terry ranking with win rates and comparison counts.
    - Where an LLM judge also ran, its view kept apart from the human one, and the disagreements listed.
-6. **Record the method** in the eval's README: the two passes, the failure taxonomy, where the annotations live, and
+7. **Record the method** in the eval's README: the two passes, the failure taxonomy, where the annotations live, and
    how the ranking was fitted.
 
 ## Don't
