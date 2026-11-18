@@ -5,25 +5,36 @@ description: The user's own index of evals they run (TTS, ASR, image, LLM, RAG, 
 
 # My evals: the index of the user's own evals
 
-The plugin is public and generic; the user's evals are not. Their index lives in the private overlay directory
-(`../../references/overlay.md`) as `evals.json`, never in this repo.
+The plugin is public and generic; the user's evals are not all public. Two layers, both named in the private overlay
+directory (`../../references/overlay.md`):
+
+- **The list of evals** is the user's own registry, if they keep one: `evals.json` → `sources` names it (e.g. a public
+  `benchmarks.json` with `id`, `name`, `category`, `stage`, `repo`, `dataset`, `space`). Read it from the local clone
+  (`git pull` first) or its raw URL. Never duplicate public facts from it.
+- **Private extras** in `<overlay>/evals.json` → `evals`, keyed by the registry `id`: nicknames, local paths, private
+  repos and Spaces, the eval's own skills, records. An eval with nothing private needs no entry here.
+No registry named: `evals.json` → `evals` is the whole index (full entries, schema below).
 
 ## Resolve (the common case)
 
-1. Read `<overlay>/evals.json`. Match the user's words against `id`, `title` and `aliases` (case-insensitive, partial
-   match fine). One clear match: use it without asking. Several: ask once, naming them. None: say so, and offer
-   `add` below if this is a new eval, or `start-eval` if it is not one yet.
-2. Load the entry's context **before acting**:
-   - each repo's `CLAUDE.md` and `README.md` (they hold the method and current state);
-   - its eval-specific skills: every `SKILL.md` under the entry's `skills` paths (usually
-     `<repo>/.claude/skills/*/`). Prefer one of them over a generic ai-eval skill when it matches the task: it carries
-     what this eval has already learned.
-   - its log or decisions file if the entry names one.
-3. Work from there. If the entry is stale (a path moved, a new Space, a new skill), fix it in `evals.json` as you go.
+1. Read the sources and the private extras. Match the user's words against `id`, `name`/`title`, `aliases` and repo
+   names (case-insensitive, partial match fine). One clear match: use it without asking. Several: ask once, naming
+   them. None: say so, and offer `register-eval` (public) or an extras entry (private), or `start-eval` if it is not an
+   eval yet.
+2. Load the eval's context **before acting**:
+   - the local clone of each repo (registry `repo` plus extras `repos`; find a clone by repo name under the user's
+     repos folder) and its `CLAUDE.md` and `README.md`;
+   - its eval-specific skills: every `SKILL.md` under the extras' `skills` paths, and any `<repo>/.claude/skills/*/`.
+     Prefer one of them over a generic ai-eval skill when it matches the task: it carries what this eval has learned;
+   - its log or decisions file if the extras name one.
+3. Work from there. If something is stale (a path moved, a new Space, a new skill), fix it where it lives: public
+   facts in the registry (`register-eval`), private ones in `evals.json`.
 
 ## Add or update an entry
 
-Write JSON (agent-first: explicit paths, IDs, URLs, absolute dates). Schema, one object per eval in `evals`:
+Write JSON (agent-first: explicit paths, IDs, URLs, absolute dates). With a registry, an extras entry holds only `id`,
+`aliases` and the private fields (`repos` that are private or local-only, `hf` private items, `skills`, `records`,
+`updated`). Without one, the full schema, one object per eval in `evals`:
 
 ```json
 {
@@ -50,7 +61,7 @@ nickname the moment they use one.
 
 ## List
 
-Group by `domain`, then `status`, with title, one-line question and leaderboard link. Machine-readable on request.
+From the registry plus extras: group by domain/category, then status/stage, with title, one-line question and leaderboard link. Machine-readable on request.
 
 ## Rules
 
