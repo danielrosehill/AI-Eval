@@ -40,7 +40,7 @@ Settle these with the user, because they can't be fixed after collection:
    ```
    This randomises left and right. `key.json` stays local.
 
-3. **Build the Space** as in `setup-annotation-space` steps 4–5, with the same invariants and
+3. **Build the Space** with `data-annotation:hf-annotation-space` (see `references/grading-with-annotation-space.md`), with the same invariants and
    the reviewer action "choose between A and B". Name it `<Name>-Feedback`, with the dataset
    `<Name>-Feedback-Data`. Both are always private. The form needs:
    - A, B, tie, both bad, with the guideline always visible,

@@ -38,7 +38,7 @@ No metric captures whether a voice is pleasant to hear, so listening decides.
 1. **Use real scripts:** the same 2–3 passages per model, including the hard parts (names,
    numbers, abbreviations, other languages, long sentences).
 2. **Go wide on models and voices,** two takes each. Takes vary in TTS, so the second take matters.
-3. **Listen blind.** `deploy-arena` for A/B, or `setup-annotation-space` for rating on naturalness,
+3. **Listen blind.** `deploy-arena` for A/B, or `data-annotation:hf-annotation-space` (`references/grading-with-annotation-space.md`) for rating on naturalness,
    pronunciation and pacing. Match loudness first, as louder clips tend to win.
 4. **Script the objective checks:** transcribe the audio with an ASR model and compare it with
    the script. This catches dropped or invented words, and pronunciation failures.

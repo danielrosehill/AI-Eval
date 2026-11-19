@@ -4,7 +4,7 @@ Agent skills for evaluating AI models for a real job, from working out what the 
 to a published write-up. Formerly `Claude-Eval-Runner-Plugin` (`eval-runner`), merged on
 2026-11-04 with the author's private eval-authoring skills.
 
-> **Status: v0.11.0 (2026-11-18): adds `my-evals` (private index of your own evals, resolved by nickname), `eval-skill` (skills specific to one eval), `references/compute.md` (heavy work to Modal) and the objective TTS voice profile in `speech-eval` (`scripts/voice_profile.py`); the README is grouped by domain. v0.10.0 (2026-11-18): adds `screen-then-rank` (the default two-pass human judgement method) and `spoken-annotations` (annotate by voice).** v0.8.0 (2026-11-04): `openrouter_catalogue.py` is tested against the live OpenRouter
+> **Status: v0.12.0 (2026-11-19): `spoken-annotations` and `setup-annotation-space` moved to the public `data-annotation` plugin (`spoken-annotations`, `hf-annotation-space`); the eval-specific grading steps stay in `references/grading-with-annotation-space.md`.** v0.11.0 (2026-11-18): adds `my-evals` (private index of your own evals, resolved by nickname), `eval-skill` (skills specific to one eval), `references/compute.md` (heavy work to Modal) and the objective TTS voice profile in `speech-eval` (`scripts/voice_profile.py`); the README is grouped by domain. v0.10.0 (2026-11-18): adds `screen-then-rank` (the default two-pass human judgement method) and `spoken-annotations` (annotate by voice).** v0.8.0 (2026-11-04): `openrouter_catalogue.py` is tested against the live OpenRouter
 > API, and `blind_items.py` on sample data. No eval has yet been taken end to end through the
 > merged plugin, and no Space has been built from the new Space skills.
 
@@ -36,8 +36,8 @@ eval (`my-evals`, `eval-skill`).
 
 | Domain | Skills |
 |---|---|
-| Text-to-speech, ASR | `speech-eval` (incl. objective voice profile: WPM, pitch, intonation, brightness, clarity via `scripts/voice_profile.py`), `screen-then-rank`, `spoken-annotations`, `deploy-arena`, `setup-annotation-space` |
-| Image (and video) | `image-gen-eval`, `informal-image-eval`, `screen-then-rank`, `setup-annotation-space` |
+| Text-to-speech, ASR | `speech-eval` (incl. objective voice profile: WPM, pitch, intonation, brightness, clarity via `scripts/voice_profile.py`), `screen-then-rank`, `data-annotation:spoken-annotations`, `deploy-arena`, `data-annotation:hf-annotation-space` |
+| Image (and video) | `image-gen-eval`, `informal-image-eval`, `screen-then-rank`, `data-annotation:hf-annotation-space` |
 | LLMs and text | `define-objective` → `run-eval`, `full-run`, `regression-eval`, framework workspaces |
 | RAG | `rag-eval` |
 | Agents | `agent-eval`, `setup-agent-eval-space` |
@@ -70,8 +70,7 @@ authenticated there, never on the laptop: [`references/compute.md`](references/c
 | Your evals | `my-evals` | Private index of your own evals: resolve a nickname to repos, datasets, Spaces and the eval's own skills |
 | | `eval-skill` | Write a skill specific to one of your evals, in its repo, and register it |
 | Human judgement | `screen-then-rank` | Default method: pass/fail screen with reasons, then blind pairwise among survivors (Bradley-Terry) |
-| | `spoken-annotations` | Annotate by voice: record per item, transcribe, a model applies it to the structure |
-| | `setup-annotation-space` | Blind grading on a private Hugging Face Space |
+| | `data-annotation:spoken-annotations`, `data-annotation:hf-annotation-space` | Annotate by voice; blind grading on a private Hugging Face Space (both moved to the `data-annotation` plugin, 2026-11-19; the eval-specific steps are in `references/grading-with-annotation-space.md`) |
 | | `deploy-arena` | Blind A/B between models |
 | | `setup-human-feedback-space` | Preference data for RLHF, DPO or reward models |
 | Build a standalone eval | `setup-eval` | Exists check, then a public repo with question, mechanism and rubric, plus a reserved dataset |

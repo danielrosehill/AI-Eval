@@ -21,7 +21,7 @@ TTS bake-off): don't score everything on 1-5 scales first. Make two passes.
 
 Quality scales (1-5 naturalness, clarity...) are an optional third pass, only if a finer read of the finalists is needed.
 
-**Either pass can be done by voice** (`spoken-annotations`): say the verdict, reason and detail for each output, and a
+**Either pass can be done by voice** (`data-annotation:spoken-annotations`): say the verdict, reason and detail for each output, and a
 model applies them to the structure afterwards.
 
 **Generate in rounds, only for survivors** (Daniel, 2026-11-18). Don't generate the full item set for every system up
@@ -55,7 +55,7 @@ automatic measurements (loudness, pace) can run on everything; generation spend 
    - **Audio:** use `danielrosehill/TTS-Pronunciation-Annotation-Starter`, the reference implementation of both
      passes. It is a Docker Space with a config, so a new eval writes a config, not code. It also has word-level stress
      and IPA tags and per-language IPA packs.
-   - **Text or images:** adapt `setup-annotation-space` for pass 1 and `deploy-arena` for pass 2. They are the same
+   - **Text or images:** adapt `data-annotation:hf-annotation-space` (with `references/grading-with-annotation-space.md`) for pass 1 and `deploy-arena` for pass 2. They are the same
      two forms, fed from the screen's survivors.
 4. **Run pass 2 through `pairwise-eval`** when it's available (the author's plugin for blind A/B:
    `start-pairwise-eval`, `package-pairwise-round`, `run-playoff`, `pairwise-results`). Feed it only the survivors of

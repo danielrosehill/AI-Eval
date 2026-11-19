@@ -55,7 +55,7 @@ target cost per image; licence for commercial use; the provider's content rules.
    implementation: `scripts/` in `danielrosehill/Tech-Graphics-Benchmark`. Check the
    files are real images (`file runs/<run_id>/images/*`) and open one.
 
-7. **Grade by hand.** `setup-annotation-space`, with criteria from the requirements. Typical
+7. **Grade by hand.** `data-annotation:hf-annotation-space` (`references/grading-with-annotation-space.md`), with criteria from the requirements. Typical
    ones: prompt adherence, text accuracy, artefacts, usability as is.
 
 8. **Use automated checks only where they're reliable.**
