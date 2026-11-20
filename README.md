@@ -4,11 +4,7 @@ Agent skills for evaluating AI models for a real job, from working out what the 
 to a published write-up. Formerly `Claude-Eval-Runner-Plugin` (`eval-runner`), merged on
 2026-11-04 with the author's private eval-authoring skills.
 
-<<<<<<< ours
-> **Status: v0.12.0 (2026-11-19): `spoken-annotations` and `setup-annotation-space` moved to the public `data-annotation` plugin (`spoken-annotations`, `hf-annotation-space`); the eval-specific grading steps stay in `references/grading-with-annotation-space.md`.** v0.11.0 (2026-11-18): adds `my-evals` (private index of your own evals, resolved by nickname), `eval-skill` (skills specific to one eval), `references/compute.md` (heavy work to Modal) and the objective TTS voice profile in `speech-eval` (`scripts/voice_profile.py`); the README is grouped by domain. v0.10.0 (2026-11-18): adds `screen-then-rank` (the default two-pass human judgement method) and `spoken-annotations` (annotate by voice).** v0.8.0 (2026-11-04): `openrouter_catalogue.py` is tested against the live OpenRouter
-=======
-> **Status: v0.9.0 (2026-11-20; `language-eval` added).** `openrouter_catalogue.py` is tested against the live OpenRouter
->>>>>>> theirs
+> **Status: v0.13.0 (2026-11-20): adds `language-eval` (language-specific evals, Hebrew worked example).** v0.12.0 (2026-11-19): `spoken-annotations` and `setup-annotation-space` moved to the public `data-annotation` plugin (`spoken-annotations`, `hf-annotation-space`); the eval-specific grading steps stay in `references/grading-with-annotation-space.md`.** v0.11.0 (2026-11-18): adds `my-evals` (private index of your own evals, resolved by nickname), `eval-skill` (skills specific to one eval), `references/compute.md` (heavy work to Modal) and the objective TTS voice profile in `speech-eval` (`scripts/voice_profile.py`); the README is grouped by domain. v0.10.0 (2026-11-18): adds `screen-then-rank` (the default two-pass human judgement method) and `spoken-annotations` (annotate by voice).** v0.8.0 (2026-11-04): `openrouter_catalogue.py` is tested against the live OpenRouter
 > API, and `blind_items.py` on sample data. No eval has yet been taken end to end through the
 > merged plugin, and no Space has been built from the new Space skills.
 
@@ -71,15 +67,12 @@ authenticated there, never on the laptop: [`references/compute.md`](references/c
 | | `agent-eval` | Tasks with checkable end states, sandboxing, reliability |
 | | `speech-eval` | ASR with WER on real audio; TTS by blind listening |
 | | `regression-eval` | A fixed test set against a baseline, for CI |
-<<<<<<< ours
+| | `language-eval` | Models for one non-English language: language benchmarks first, then normalisation, tokeniser, judge and contamination pitfalls (Hebrew worked example, see [Hebrew-AI-Tools](https://github.com/danielrosehill/Hebrew-AI-Tools)) |
+| Human judgement | `setup-annotation-space` | Blind grading on a private Hugging Face Space |
 | Your evals | `my-evals` | Private index of your own evals: resolve a nickname to repos, datasets, Spaces and the eval's own skills |
 | | `eval-skill` | Write a skill specific to one of your evals, in its repo, and register it |
 | Human judgement | `screen-then-rank` | Default method: pass/fail screen with reasons, then blind pairwise among survivors (Bradley-Terry) |
 | | `data-annotation:spoken-annotations`, `data-annotation:hf-annotation-space` | Annotate by voice; blind grading on a private Hugging Face Space (both moved to the `data-annotation` plugin, 2026-11-19; the eval-specific steps are in `references/grading-with-annotation-space.md`) |
-=======
-| | `language-eval` | Models for one non-English language: language benchmarks first, then normalisation, tokeniser, judge and contamination pitfalls (Hebrew worked example, see [Hebrew-AI-Tools](https://github.com/danielrosehill/Hebrew-AI-Tools)) |
-| Human judgement | `setup-annotation-space` | Blind grading on a private Hugging Face Space |
->>>>>>> theirs
 | | `deploy-arena` | Blind A/B between models |
 | | `setup-human-feedback-space` | Preference data for RLHF, DPO or reward models |
 | Build a standalone eval | `setup-eval` | Exists check, then a public repo with question, mechanism and rubric, plus a reserved dataset |
